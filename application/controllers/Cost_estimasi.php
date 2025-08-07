@@ -10,6 +10,8 @@ class Cost_estimasi extends CI_Controller {
         $this->load->model('M_Paket');
         $this->load->model('M_Fasilitas');
         $this->load->model('M_Home');
+        $this->load->model('M_Jenis');
+
     }
 
     public function index()
@@ -21,6 +23,8 @@ class Cost_estimasi extends CI_Controller {
         
         // Data paket wisata untuk dropdown
         $data['paket'] = $this->M_Paket->getPaket()->result_array();
+        $data['jenis_wisata'] = $this->M_Jenis->getAll()->result_array();
+
         
         // Data fasilitas untuk checkbox
         $data['fasilitas'] = $this->M_Fasilitas->getAllArray();

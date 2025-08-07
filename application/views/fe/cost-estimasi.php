@@ -324,6 +324,56 @@
   .fade-in {
     animation: fadeInUp 0.5s ease;
   }
+
+  .input-counter {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.input-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 26px;
+}
+
+.counter-input {
+  width: 28px;                /* muat 2 digit */
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 2px 0;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #fff;
+  height: 24px;
+}
+
+.btn-plus,
+.btn-minus {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0 6px;
+  font-size: 12px;
+  line-height: 1;
+  height: 24px;
+  width: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-plus:hover,
+.btn-minus:hover {
+  background: #218838;
+}
+
 </style>
 
 
@@ -352,28 +402,43 @@
               <label class="form-label">Tema Kunjungan *</label>
               <input type="text" class="form-control" name="tema_kunjungan" id="tema_kunjungan" placeholder="Contoh: Wisata Keluarga, Study Tour, Outbound, dll" required>
             </div>
+<h5 class="form-label">Tiket Masuk Jenis Wisata</h5>
+<div class="facilities-grid">
+  <?php foreach ($jenis_wisata as $j): ?>
+    <div class="facility-item position-relative">
+      <!-- Input custom dengan tombol -->
+      <div style="position: absolute; top: 10px; right: 10px;" class="input-counter">
+        <button type="button" class="btn-minus" onclick="changeValue('jenis_wisata_<?= $j['id_jenis']; ?>', -1)">–</button>
+        <input type="text" id="jenis_wisata_<?= $j['id_jenis']; ?>" name="jenis_wisata[<?= $j['id_jenis']; ?>]" value="0" class="counter-input">
+        <button type="button" class="btn-plus" onclick="changeValue('jenis_wisata_<?= $j['id_jenis']; ?>', 1)">+</button>
+      </div>
 
-            <div class="form-group">
-              <label class="form-label">Jumlah Peserta *</label>
-              <input type="number" class="form-control" name="jumlah_peserta" id="jumlah_peserta" min="1" max="500" placeholder="Contoh: 25" required>
-            </div>
+      <div class="facility-name mb-1"><?= $j['nama_wisata']; ?></div>
+      <div class="facility-price">Rp <?= number_format($j['harga_tiket'], 0, ',', '.'); ?>/org</div>
+    </div>
+  <?php endforeach; ?>
+</div>
 
-            <!-- Package Selection -->
-            <div class="form-group">
-              <label class="form-label">Paket Wisata *</label>
-              <select class="form-control form-select" name="paket_id" id="paket_id" required>
-                <option value="">Pilih paket wisata</option>
-                <?php foreach ($paket as $p): ?>
-                  <option value="<?= $p['id']; ?>" data-price="<?= $p['harga']; ?>">
-                    <?= $p['nama_paket']; ?> - Rp <?= number_format($p['harga'], 0, ',', '.'); ?>/orang
-                  </option>
-                <?php endforeach; ?>
-              </select>
-            </div>
+    <h5 class="form-label mt-4">Paket Wisata</h5>
+<div class="facilities-grid">
+  <?php foreach ($paket as $p): ?>
+    <div class="facility-item position-relative">
+      <div style="position: absolute; top: 10px; right: 10px;" class="input-counter">
+        <button type="button" class="btn-minus" onclick="changeValue('paket_<?= $p['id']; ?>', -1)">–</button>
+        <input type="text" id="paket_<?= $p['id']; ?>" name="paket[<?= $p['id']; ?>]" value="0" class="counter-input" readonly>
+        <button type="button" class="btn-plus" onclick="changeValue('paket_<?= $p['id']; ?>', 1)">+</button>
+      </div>
+
+      <div class="facility-name mb-1"><?= $p['nama_paket']; ?></div>
+      <div class="facility-price">Rp <?= number_format($p['harga'], 0, ',', '.'); ?>/org</div>
+    </div>
+  <?php endforeach; ?>
+</div>
 
             <!-- Additional Facilities -->
+             <h5 class="form-label mt-4">Fasilitas Tambahan (opsional)</h5>
             <div class="form-group">
-              <label class="form-label">Fasilitas Tambahan (Opsional)</label>
+              
               <div class="facilities-grid">
                 <?php foreach ($fasilitas as $f): ?>
                   <div class="facility-item" onclick="toggleFacility(this, <?= $f['id_fasilitas']; ?>)">
@@ -454,11 +519,11 @@
               <div class="total-amount" id="totalAmount">Rp 0</div>
             </div>
 
-            <!-- Action Buttons -->
-            <button type="button" class="btn-primary" onclick="submitForm()">
-              <i class="bi bi-whatsapp"></i>
-              Kirim via WhatsApp
-            </button>
+            <button type="button" class="btn-primary" onclick="downloadPDF()">
+  <i class="bi bi-file-earmark-pdf"></i>
+  Download PDF
+</button>
+
             
             <div style="margin-top: 15px; text-align: center;">
               <button type="button" class="btn-secondary" onclick="resetForm()">
@@ -473,19 +538,6 @@
   </div>
 </section>
 
-<!-- Success Modal -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-body text-center" style="padding: 40px;">
-        <i class="bi bi-whatsapp" style="font-size: 4rem; color: #25d366; margin-bottom: 20px;"></i>
-        <h4 style="margin-bottom: 15px;">WhatsApp Terbuka!</h4>
-        <p style="color: #6c757d; margin-bottom: 30px;">Silakan kirim pesan yang sudah disiapkan. Tim kami akan membalas dalam 1x24 jam untuk konfirmasi lebih lanjut.</p>
-        <button type="button" class="btn-primary" onclick="closeModal()">Tutup</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
 let currentCalculation = null;
@@ -508,121 +560,166 @@ function toggleFacility(element, facilityId) {
   calculateCost();
 }
 
-// Calculate cost in real-time
 function calculateCost() {
-  const paketId = document.getElementById('paket_id').value;
-  const jumlahPeserta = parseInt(document.getElementById('jumlah_peserta').value) || 0;
+  let totalOrang = 0;
+  let totalBiaya = 0;
+
+  // Jenis Wisata
+  const jenisWisataItems = document.querySelectorAll('input[name^="jenis_wisata["]');
+  const jenisWisataData = [];
+  jenisWisataItems.forEach(input => {
+    const jumlah = parseInt(input.value) || 0;
+    if (jumlah > 0) {
+      const parent = input.closest('.facility-item');
+      const nama = parent.querySelector('.facility-name').textContent.trim();
+      const hargaText = parent.querySelector('.facility-price').textContent.trim();
+      const harga = parseInt(hargaText.replace(/[^\d]/g, '')) || 0;
+
+      const subtotal = jumlah * harga;
+      totalBiaya += subtotal;
+      totalOrang += jumlah;
+
+      jenisWisataData.push({ nama, jumlah, harga, subtotal });
+    }
+  });
+
+  // Paket Wisata
+  const paketItems = document.querySelectorAll('input[name^="paket["]');
+  const paketData = [];
+  paketItems.forEach(input => {
+    const jumlah = parseInt(input.value) || 0;
+    if (jumlah > 0) {
+      const parent = input.closest('.facility-item');
+      const nama = parent.querySelector('.facility-name').textContent.trim();
+      const hargaText = parent.querySelector('.facility-price').textContent.trim();
+      const harga = parseInt(hargaText.replace(/[^\d]/g, '')) || 0;
+
+      const subtotal = jumlah * harga;
+      totalBiaya += subtotal;
+      totalOrang += jumlah;
+
+      paketData.push({ nama, jumlah, harga, subtotal });
+    }
+  });
+
+  // Fasilitas tambahan
   const fasilitasCheckboxes = document.querySelectorAll('input[name="fasilitas_ids[]"]:checked');
-  
-  if (!paketId || jumlahPeserta <= 0) {
-    showEmptySummary();
-    return;
-  }
-  
-  // Get package data
-  const paketSelect = document.getElementById('paket_id');
-  const selectedOption = paketSelect.options[paketSelect.selectedIndex];
-  const paketPrice = parseInt(selectedOption.dataset.price) || 0;
-  const paketName = selectedOption.text.split(' - ')[0];
-  
-  // Calculate package cost
-  const paketSubtotal = paketPrice * jumlahPeserta;
-  
-  // Calculate facilities cost
   let fasilitasTotal = 0;
   const fasilitasList = [];
-  
-  fasilitasCheckboxes.forEach(checkbox => {
-    const price = parseInt(checkbox.dataset.price) || 0;
-    const facilityItem = checkbox.closest('.facility-item');
-    const facilityName = facilityItem.querySelector('.facility-name').textContent;
-    
+  fasilitasCheckboxes.forEach(cb => {
+    const price = parseInt(cb.dataset.price) || 0;
+    const name = cb.closest('.facility-item').querySelector('.facility-name').textContent.trim();
     fasilitasTotal += price;
-    fasilitasList.push({
-      name: facilityName,
-      price: price,
-      subtotal: price
-    });
+    fasilitasList.push({ name, price });
   });
-  
-  // Calculate discount
+
+  totalBiaya += fasilitasTotal;
+
+  // Diskon
   let discountPercentage = 0;
-  if (jumlahPeserta >= 20) {
-    discountPercentage = 10;
-  } else if (jumlahPeserta >= 10) {
-    discountPercentage = 5;
-  }
-  
-  const subtotal = paketSubtotal + fasilitasTotal;
-  const discountAmount = subtotal * (discountPercentage / 100);
-  const total = subtotal - discountAmount;
-  
+  if (totalOrang >= 20) discountPercentage = 10;
+  else if (totalOrang >= 10) discountPercentage = 5;
+  const discountAmount = totalBiaya * discountPercentage / 100;
+  const finalTotal = totalBiaya - discountAmount;
+
   // Update UI
   updateSummaryUI({
-    paketName: paketName,
-    paketPrice: paketPrice,
-    jumlahPeserta: jumlahPeserta,
-    paketSubtotal: paketSubtotal,
-    fasilitasList: fasilitasList,
-    fasilitasTotal: fasilitasTotal,
-    discountPercentage: discountPercentage,
-    discountAmount: discountAmount,
-    total: total
+    jenisWisataData,
+    paketData,
+    fasilitasList,
+    fasilitasTotal,
+    totalOrang,
+    totalBiaya,
+    discountPercentage,
+    discountAmount,
+    finalTotal
   });
-  
-  currentCalculation = {
-    paket_id: paketId,
-    jumlah_peserta: jumlahPeserta,
-    fasilitas_ids: Array.from(fasilitasCheckboxes).map(cb => cb.value),
-    total: total
-  };
 }
+
 
 function updateSummaryUI(data) {
   document.getElementById('summaryContent').style.display = 'none';
   document.getElementById('summaryDetails').style.display = 'block';
-  
-  document.getElementById('packageName').textContent = data.paketName;
-  document.getElementById('packagePrice').textContent = 'Rp ' + formatNumber(data.paketPrice);
-  document.getElementById('participantCount').textContent = data.jumlahPeserta + ' orang';
-  document.getElementById('packageSubtotal').textContent = 'Rp ' + formatNumber(data.paketSubtotal);
-  
-  // Facilities section
-  const facilitiesSection = document.getElementById('facilitiesSection');
-  const facilitiesList = document.getElementById('facilitiesList');
-  
+
+  const summaryBox = document.getElementById('summaryDetails');
+  summaryBox.innerHTML = ''; // bersihkan isinya
+
+  // Ringkasan jenis wisata
+  data.jenisWisataData.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'summary-item';
+    el.innerHTML = `
+      <span class="summary-label">${item.nama} (${item.jumlah} org)</span>
+      <span class="summary-value">Rp ${formatNumber(item.subtotal)}</span>
+    `;
+    summaryBox.appendChild(el);
+  });
+
+  // Ringkasan paket wisata
+  data.paketData.forEach(item => {
+    const el = document.createElement('div');
+    el.className = 'summary-item';
+    el.innerHTML = `
+      <span class="summary-label">${item.nama} (${item.jumlah} org)</span>
+      <span class="summary-value">Rp ${formatNumber(item.subtotal)}</span>
+    `;
+    summaryBox.appendChild(el);
+  });
+
+  // Fasilitas
   if (data.fasilitasList.length > 0) {
-    facilitiesSection.style.display = 'block';
-    document.getElementById('facilitiesTotal').textContent = 'Rp ' + formatNumber(data.fasilitasTotal);
-    
-    facilitiesList.innerHTML = '';
-    data.fasilitasList.forEach(facility => {
-      const item = document.createElement('div');
-      item.className = 'summary-item';
-      item.style.fontSize = '14px';
-      item.style.paddingLeft = '20px';
-      item.innerHTML = `
-        <span class="summary-label">${facility.name}</span>
-        <span class="summary-value">Rp ${formatNumber(facility.subtotal)}</span>
+    const title = document.createElement('div');
+    title.className = 'summary-item';
+    title.innerHTML = `<span class="summary-label"><b>Fasilitas Tambahan</b></span><span class="summary-value">Rp ${formatNumber(data.fasilitasTotal)}</span>`;
+    summaryBox.appendChild(title);
+
+    data.fasilitasList.forEach(item => {
+      const el = document.createElement('div');
+      el.className = 'summary-item';
+      el.innerHTML = `
+        <span class="summary-label" style="padding-left: 20px;">${item.name}</span>
+        <span class="summary-value">+Rp ${formatNumber(item.price)}</span>
       `;
-      facilitiesList.appendChild(item);
+      summaryBox.appendChild(el);
     });
-  } else {
-    facilitiesSection.style.display = 'none';
   }
-  
-  // Discount section
-  const discountSection = document.getElementById('discountSection');
+
+  // Diskon
   if (data.discountPercentage > 0) {
-    discountSection.style.display = 'block';
-    document.getElementById('discountPercentage').textContent = data.discountPercentage;
-    document.getElementById('discountAmount').textContent = '-Rp ' + formatNumber(data.discountAmount);
-  } else {
-    discountSection.style.display = 'none';
+    const el = document.createElement('div');
+    el.className = 'summary-item';
+    el.innerHTML = `
+      <span class="summary-label">Diskon (${data.discountPercentage}%)</span>
+      <span class="summary-value text-success">-Rp ${formatNumber(data.discountAmount)}</span>
+    `;
+    summaryBox.appendChild(el);
   }
-  
-  document.getElementById('totalAmount').textContent = 'Rp ' + formatNumber(data.total);
+
+  // Total
+  const totalBox = document.createElement('div');
+  totalBox.className = 'summary-total';
+  totalBox.innerHTML = `
+    <div class="total-label">Total Estimasi</div>
+    <div class="total-amount">Rp ${formatNumber(data.finalTotal)}</div>
+  `;
+  summaryBox.appendChild(totalBox);
+
+  // Tombol
+  const actionBox = document.createElement('div');
+  actionBox.innerHTML = `
+   <button type="button" class="btn-primary" onclick="downloadPDF()">
+  <i class="bi bi-file-earmark-pdf"></i>
+  Download PDF
+</button>
+
+
+    <div class="text-center mt-3">
+      <button type="button" class="btn-secondary" onclick="resetForm()">Reset Form</button>
+    </div>
+  `;
+  summaryBox.appendChild(actionBox);
 }
+
 
 function showEmptySummary() {
   document.getElementById('summaryContent').style.display = 'block';
@@ -638,137 +735,8 @@ function formatNumber(num) {
 document.getElementById('paket_id').addEventListener('change', calculateCost);
 document.getElementById('jumlah_peserta').addEventListener('input', calculateCost);
 
-// Submit form
-function submitForm() {
-  const nama = document.getElementById('nama').value;
-  const nomor = document.getElementById('nomor').value;
-  const temaKunjungan = document.getElementById('tema_kunjungan').value;
-  
-  if (!nama || !nomor || !temaKunjungan || !currentCalculation) {
-    alert('Mohon lengkapi semua field yang wajib diisi dan pilih paket wisata.');
-    return;
-  }
-  
-  // Show loading state
-  const submitBtn = document.querySelector('.btn-primary');
-  const originalText = submitBtn.innerHTML;
-  submitBtn.innerHTML = '<span class="spinner"></span>Mengirim ke WhatsApp...';
-  submitBtn.disabled = true;
-  
-  // Prepare WhatsApp message
-  setTimeout(() => {
-    const waMessage = generateWhatsAppMessage();
-    const waNumber = '08123456789';
-    const waUrl = `https://wa.me/${waNumber.replace(/^0/, '62')}?text=${encodeURIComponent(waMessage)}`;
-    
-    // Open WhatsApp
-    window.open(waUrl, '_blank');
-    
-    // Reset button
-    submitBtn.innerHTML = originalText;
-    submitBtn.disabled = false;
-    
-    // Show success modal
-    const modal = new bootstrap.Modal(document.getElementById('successModal'));
-    modal.show();
-    
-    // Reset form after delay
-    setTimeout(() => {
-      resetForm();
-    }, 3000);
-  }, 1000);
-}
 
-// Generate WhatsApp message
-function generateWhatsAppMessage() {
-  const nama = document.getElementById('nama').value;
-  const nomor = document.getElementById('nomor').value;
-  const temaKunjungan = document.getElementById('tema_kunjungan').value;
-  const jumlahPeserta = document.getElementById('jumlah_peserta').value;
-  
-  // Get package info
-  const paketSelect = document.getElementById('paket_id');
-  const selectedOption = paketSelect.options[paketSelect.selectedIndex];
-  const paketName = selectedOption.text.split(' - ')[0];
-  const paketPrice = formatNumber(parseInt(selectedOption.dataset.price));
-  
-  // Get selected facilities
-  const fasilitasCheckboxes = document.querySelectorAll('input[name="fasilitas_ids[]"]:checked');
-  let fasilitasList = '';
-  if (fasilitasCheckboxes.length > 0) {
-    fasilitasList = '\n\n*FASILITAS TAMBAHAN:*\n';
-    fasilitasCheckboxes.forEach((checkbox, index) => {
-      const facilityItem = checkbox.closest('.facility-item');
-      const facilityName = facilityItem.querySelector('.facility-name').textContent;
-      const facilityPrice = formatNumber(parseInt(checkbox.dataset.price));
-      fasilitasList += `${index + 1}. ${facilityName} - Rp ${facilityPrice}\n`;
-    });
-  }
-  
-  // Calculate totals
-  const paketSubtotal = parseInt(selectedOption.dataset.price) * parseInt(jumlahPeserta);
-  let fasilitasTotal = 0;
-  fasilitasCheckboxes.forEach(checkbox => {
-    fasilitasTotal += parseInt(checkbox.dataset.price);
-  });
-  
-  const subtotal = paketSubtotal + fasilitasTotal;
-  let discountPercentage = 0;
-  if (parseInt(jumlahPeserta) >= 20) {
-    discountPercentage = 10;
-  } else if (parseInt(jumlahPeserta) >= 10) {
-    discountPercentage = 5;
-  }
-  
-  const discountAmount = subtotal * (discountPercentage / 100);
-  const total = subtotal - discountAmount;
-  
-  // Generate message
-  let message = `🌿 *PERMINTAAN COST ESTIMASI WISATA*
-🏖️ *Desa Wisata Sedari*
 
-👤 *DATA PENGUNJUNG:*
-• Nama: ${nama}
-• No. Telepon: ${nomor}
-• Tema Kunjungan: ${temaKunjungan}
-• Jumlah Peserta: ${jumlahPeserta} orang
-
-📦 *PAKET DIPILIH:*
-• ${paketName}
-• Harga: Rp ${paketPrice}/orang
-• Subtotal: Rp ${formatNumber(paketSubtotal)}${fasilitasList}
-
-💰 *RINCIAN BIAYA:*
-• Subtotal Paket: Rp ${formatNumber(paketSubtotal)}`;
-
-  if (fasilitasTotal > 0) {
-    message += `\n• Fasilitas Tambahan: Rp ${formatNumber(fasilitasTotal)}`;
-  }
-  
-  message += `\n• Total Sebelum Diskon: Rp ${formatNumber(subtotal)}`;
-  
-  if (discountPercentage > 0) {
-    message += `\n• Diskon Grup (${discountPercentage}%): -Rp ${formatNumber(discountAmount)}`;
-  }
-  
-  message += `\n\n🎯 *TOTAL ESTIMASI: Rp ${formatNumber(total)}*`;
-  
-  if (discountPercentage > 0) {
-    message += `\n\n🎉 *Selamat! Anda mendapat diskon ${discountPercentage}% untuk grup ${parseInt(jumlahPeserta) >= 20 ? 'besar' : 'menengah'}!*`;
-  }
-  
-  message += `\n\n📋 *CATATAN:*
-• Estimasi ini belum termasuk transportasi
-• Harga dapat berubah sewaktu-waktu
-• Konfirmasi lebih lanjut diperlukan
-• Booking dapat dilakukan minimal H-3
-
-🕒 Estimasi dibuat pada: ${new Date().toLocaleString('id-ID')}
-
-Terima kasih atas minat Anda untuk berkunjung ke Desa Wisata Sedari! 🙏`;
-
-  return message;
-}
 
 function resetForm() {
   document.getElementById('costForm').reset();
@@ -792,10 +760,7 @@ function printSummary() {
   window.print();
 }
 
-function closeModal() {
-  const modal = bootstrap.Modal.getInstance(document.getElementById('successModal'));
-  modal.hide();
-}
+
 
 // Phone number formatting
 document.getElementById('nomor').addEventListener('input', function(e) {
@@ -806,5 +771,182 @@ document.getElementById('nomor').addEventListener('input', function(e) {
   e.target.value = value;
 });
 </script>
+<script>
+function changeValue(inputId, delta) {
+  const input = document.getElementById(inputId);
+  let value = parseInt(input.value) || 0;
+  value += delta;
+  if (value < 0) value = 0;
+  input.value = value;
+
+  // Trigger hitung ulang jika dibutuhkan
+  if (typeof calculateCost === 'function') {
+    calculateCost();
+  }
+}
+async function downloadPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const nama = document.getElementById('nama').value;
+  const nomor = document.getElementById('nomor').value;
+  const temaKunjungan = document.getElementById('tema_kunjungan').value;
+
+  if (!nama || !nomor || !temaKunjungan) {
+    alert('Mohon lengkapi semua data sebelum mengunduh PDF.');
+    return;
+  }
+
+  let y = 20;
+
+  // Header
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('Estimasi Biaya Kunjungan Wisata', 105, y, { align: 'center' });
+
+  y += 10;
+  doc.setLineWidth(0.5);
+  doc.line(20, y, 190, y);
+  y += 10;
+
+  // Informasi Pengunjung
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(12);
+  doc.text(`Nama Lengkap  : ${nama}`, 20, y); y += 7;
+  doc.text(`No. Telepon   : ${nomor}`, 20, y); y += 7;
+  doc.text(`Tema Kunjungan: ${temaKunjungan}`, 20, y); y += 10;
+
+  // Tabel Jenis Wisata
+  const addTableHeader = (judul) => {
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(40, 167, 69);
+    doc.text(judul, 20, y); y += 6;
+    doc.setDrawColor(200);
+    doc.setTextColor(0);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text("Nama", 22, y);
+    doc.text("Jumlah", 100, y);
+    doc.text("Subtotal", 150, y);
+    y += 5;
+    doc.setLineWidth(0.1);
+    doc.line(20, y, 190, y);
+    y += 5;
+  };
+
+  const addTableRow = (nama, jumlah, subtotal) => {
+    doc.setFont('helvetica', 'normal');
+    doc.text(nama, 22, y);
+    doc.text(`${jumlah} org`, 100, y);
+    doc.text(`Rp ${formatNumber(subtotal)}`, 150, y);
+    y += 6;
+  };
+
+  let total = 0;
+  let totalPeserta = 0;
+
+  // Jenis Wisata
+  const jenisInputs = document.querySelectorAll('input[name^="jenis_wisata["]');
+  let adaJenis = false;
+  jenisInputs.forEach(input => {
+    const jumlah = parseInt(input.value) || 0;
+    if (jumlah > 0) {
+      if (!adaJenis) {
+        addTableHeader("Tiket Masuk Jenis Wisata");
+        adaJenis = true;
+      }
+      const parent = input.closest('.facility-item');
+      const nama = parent.querySelector('.facility-name').textContent.trim();
+      const harga = parseInt(parent.querySelector('.facility-price').textContent.replace(/[^\d]/g, ''));
+      const subtotal = harga * jumlah;
+      addTableRow(nama, jumlah, subtotal);
+      total += subtotal;
+      totalPeserta += jumlah;
+    }
+  });
+
+  // Paket Wisata
+  const paketInputs = document.querySelectorAll('input[name^="paket["]');
+  let adaPaket = false;
+  paketInputs.forEach(input => {
+    const jumlah = parseInt(input.value) || 0;
+    if (jumlah > 0) {
+      if (!adaPaket) {
+        y += 5;
+        addTableHeader("Paket Wisata");
+        adaPaket = true;
+      }
+      const parent = input.closest('.facility-item');
+      const nama = parent.querySelector('.facility-name').textContent.trim();
+      const harga = parseInt(parent.querySelector('.facility-price').textContent.replace(/[^\d]/g, ''));
+      const subtotal = harga * jumlah;
+      addTableRow(nama, jumlah, subtotal);
+      total += subtotal;
+      totalPeserta += jumlah;
+    }
+  });
+
+  // Fasilitas Tambahan
+  const fasilitas = document.querySelectorAll('input[name="fasilitas_ids[]"]:checked');
+  let fasilitasTotal = 0;
+  if (fasilitas.length > 0) {
+    y += 5;
+    addTableHeader("Fasilitas Tambahan");
+    fasilitas.forEach(cb => {
+      const parent = cb.closest('.facility-item');
+      const nama = parent.querySelector('.facility-name').textContent.trim();
+      const harga = parseInt(cb.dataset.price);
+      addTableRow(nama, 1, harga);
+      fasilitasTotal += harga;
+    });
+    total += fasilitasTotal;
+  }
+
+  // Diskon
+  let discountPercentage = 0;
+  if (totalPeserta >= 20) discountPercentage = 10;
+  else if (totalPeserta >= 10) discountPercentage = 5;
+  const discount = total * (discountPercentage / 100);
+  const totalFinal = total - discount;
+
+  if (discount > 0) {
+    y += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(50, 150, 50);
+    doc.text(`Diskon Grup (${discountPercentage}%): -Rp ${formatNumber(discount)}`, 20, y);
+    doc.setTextColor(0);
+  }
+
+  // Total Estimasi
+  y += 10;
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(0, 0, 100);
+  doc.text(`TOTAL ESTIMASI: Rp ${formatNumber(totalFinal)}`, 20, y);
+
+  // Catatan
+  y += 15;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(100);
+  doc.text("Catatan:", 20, y); y += 5;
+  doc.text("• Estimasi biaya belum termasuk transportasi.", 24, y); y += 5;
+  doc.text("• Harga dapat berubah sewaktu-waktu.", 24, y); y += 5;
+  doc.text("• Estimasi ini bersifat sementara dan perlu konfirmasi.", 24, y); y += 10;
+
+  doc.setFont('helvetica', 'italic');
+  doc.text(`Dicetak pada: ${new Date().toLocaleString('id-ID')}`, 20, y);
+
+  // Simpan PDF
+  doc.save(`Estimasi-Kunjungan-${nama}.pdf`);
+}
+
+function formatNumber(num) {
+  return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+}
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <?php $this->load->view('templates/template-fe/footer'); ?>
