@@ -739,15 +739,30 @@ document.getElementById('jumlah_peserta').addEventListener('input', calculateCos
 
 
 function resetForm() {
+  // Reset seluruh input form
   document.getElementById('costForm').reset();
-  
-  // Reset facility selections
+
+  // Reset input jumlah (counter-input) ke 0
+  document.querySelectorAll('.counter-input').forEach(input => {
+    input.value = '0';
+  });
+
+  // Hapus semua fasilitas yang terpilih
   document.querySelectorAll('.facility-item').forEach(item => {
     item.classList.remove('selected');
-    item.querySelector('.facility-check i').style.display = 'none';
+    const checkIcon = item.querySelector('.facility-check i');
+    if (checkIcon) checkIcon.style.display = 'none';
   });
-  
-  showEmptySummary();
+
+  // Bersihkan ringkasan biaya
+  const summaryDetails = document.getElementById('summaryDetails');
+  summaryDetails.innerHTML = '';
+  summaryDetails.style.display = 'none';
+
+  // Tampilkan kembali state kosong
+  document.getElementById('summaryContent').style.display = 'block';
+
+  // Reset perhitungan
   currentCalculation = null;
 }
 
