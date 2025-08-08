@@ -49,10 +49,10 @@
   }
 
   #hero-animated h1 {
-    font-size: 70px;
+    font-size: 60px;
     font-weight: 700;
     color: #ffffff;
-    margin-bottom: 20px;
+    margin-bottom: 23px;
     opacity: 0;
     animation: slideIn 1.5s ease forwards;
     animation-delay: 0.5s;

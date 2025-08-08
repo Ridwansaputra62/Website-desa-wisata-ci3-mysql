@@ -25,11 +25,12 @@
 
             <a class="navbar-brand d-flex align-items-center" href="<?= base_url('admin'); ?>">
                 <!-- Logo icon -->
-                <b class="logo-icon p-l-10">
-                    <img src="<?= base_url('assets/images/users/' . $logo); ?>" alt="logo" class="light-logo rounded-circle" width="40" height="40" style="object-fit: cover;">
-                </b>
+                <b class="logo-icon" style="margin-left: 5px;">
+    <img src="<?= base_url('assets/images/users/' . $logo); ?>" alt="logo" class="light-logo rounded-circle" width="40" height="40" style="object-fit: cover;">
+</b>
+
                 <!-- Logo text -->
-                <span class="logo-text text-white font-weight-bold ml-2" style="font-size: 16px;">
+                <span class="logo-text text-white font-weight-bold ml-2" style="font-size: 14px;">
                     <?= $nama; ?>
                 </span>
             </a>

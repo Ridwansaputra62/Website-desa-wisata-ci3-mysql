@@ -3,8 +3,16 @@
 
 <head>
   <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta id="vp" name="viewport" content="width=device-width, initial-scale=1">
+<script>
+  (function () {
+    var vp = document.getElementById('vp');
+    var isDesktop = Math.max(screen.width, window.innerWidth || 0) >= 992;
+    if (isDesktop) vp.setAttribute('content', 'width=device-width, initial-scale=0.5');
+  })();
+</script>
 
+  
   <title><?= isset($title) ? $title : 'Desa Wisata' ?></title>
   <meta content="" name="description">
   <meta content="" name="keywords">
@@ -63,17 +71,20 @@ $faviconUrl = base_url('assets/images/users/' . $logoFile);
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
+ 
 </head>
 
 <body>
 
  <!-- ======= CSS + SECTION HERO + NAVBAR ======= -->
 <style>
+
   /* Matikan background transparent dari .sticked jika .bg-active sedang aktif */
 header.header.sticked:not(.bg-active) {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
 
 /* ====== NAVBAR STYLES ====== */
 header.header {
@@ -102,9 +113,12 @@ header.header.text-active {
 
 
 
+
+
 nav.navbar ul li a {
   color: var(--nav-text-color) !important;
-  font-weight: 600 !important; /* lebih tebal tapi tetap proporsional */
+  font-size: 14px; /* ukuran teks navbar lebih kecil */
+  font-weight: 500 !important; /* sedikit lebih ringan */
   transition: color 0.4s ease, font-weight 0.3s ease;
 }
 
@@ -131,14 +145,14 @@ header.header.active nav.navbar ul li a {
     border-radius: 8px;
   }
 
-  nav.navbar ul {
-    list-style: none;
-    display: flex;
-    gap: 35px;
-    margin: 0;
-    padding: 0;
-    align-items: center;
-  }
+ nav.navbar ul {
+  list-style: none;
+  display: flex;
+  gap: 20px; /* jarak antar menu diperkecil */
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
 
  
 
@@ -729,20 +743,27 @@ header.header.active nav.navbar ul li a {
     const scrollY = window.scrollY;
 
     // ✅ Atur jarak sesuai keinginan
-    const bgThreshold = 700;
-    const textThreshold = 700;
+    const bgThresholdDesktop = 550; // jarak untuk desktop
+    const bgThresholdMobile = 700;  // jarak untuk mobile
+    const textThresholdDesktop = 550;
+    const textThresholdMobile = 700;
 
-    // matikan efek default template
+    // Tentukan threshold berdasarkan ukuran layar
+    const isMobile = window.innerWidth <= 768;
+    const bgThreshold = isMobile ? bgThresholdMobile : bgThresholdDesktop;
+    const textThreshold = isMobile ? textThresholdMobile : textThresholdDesktop;
+
+    // Matikan efek default template
     header.classList.remove('header-scrolled');
 
-    // background navbar
+    // Background navbar
     if (scrollY > bgThreshold) {
       header.classList.add("bg-active");
     } else {
       header.classList.remove("bg-active");
     }
 
-    // warna teks navbar
+    // Warna teks navbar
     if (scrollY > textThreshold) {
       header.classList.add("text-active");
     } else {
@@ -753,11 +774,9 @@ header.header.active nav.navbar ul li a {
   // Handle mobile menu toggle
   if (mobileMenuToggle && navbar) {
     mobileMenuToggle.addEventListener("click", function() {
-      // Toggle mobile menu
       navbar.classList.toggle("mobile-active");
       header.classList.toggle("mobile-menu-open");
-      
-      // Change hamburger icon
+
       const icon = mobileMenuToggle.querySelector("i");
       if (navbar.classList.contains("mobile-active")) {
         icon.classList.remove("bi-list");

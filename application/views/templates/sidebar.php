@@ -4,6 +4,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <!-- ============================================================== -->
 <!-- Left Sidebar -->
 <!-- ============================================================== -->
+
+<style>
+  /* Ukuran font sidebar */
+  .left-sidebar .sidebar-nav ul .sidebar-item a {
+    font-size: 13px; /* perkecil font */
+    padding: 8px 15px; /* perkecil padding */
+  }
+
+  /* Perkecil ikon di sidebar */
+  .left-sidebar .sidebar-nav ul .sidebar-item a i {
+    font-size: 16px;
+    margin-right: 8px;
+  }
+
+  /* Sidebar full height */
+  .left-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh; /* full tinggi layar */
+    overflow-y: auto;
+  }
+
+  /* Scroll penuh tanpa menyisakan ruang kosong */
+  .scroll-sidebar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* Jarak di tombol beranda agar tidak menempel header */
+  .left-sidebar .sidebar-nav ul .sidebar-item:first-child {
+    margin-top: 15px; /* geser sedikit ke bawah */
+  }
+</style>
+
 <aside class="left-sidebar" data-sidebarbg="skin5">
   <div class="scroll-sidebar">
     <nav class="sidebar-nav">

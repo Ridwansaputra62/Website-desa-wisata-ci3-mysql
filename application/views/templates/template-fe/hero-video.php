@@ -56,7 +56,7 @@
   }
 
   #hero-animated h1 {
-    font-size: 70px;
+    font-size: 60px;
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 20px;
@@ -66,7 +66,7 @@
   }
 
   #hero-animated p {
-    font-size: 25px;
+    font-size: 23px;
     margin-bottom: 30px;
     color: #e6ffe6;
     opacity: 0;

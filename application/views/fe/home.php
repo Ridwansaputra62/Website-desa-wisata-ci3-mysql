@@ -1155,34 +1155,7 @@
     </section><!-- End F.A.Q Section -->
 
 
-    <section id="recent-blog-posts" class="recent-blog-posts">
-  <div class="container" data-aos="fade-up">
-    <div class="section-header text-center">
-      <h2>Artikel Seputar Desa Wisata Sedari</h2>
-      <p>Baca artikel terbaru seputar wisata alam, tips berkunjung, dan info menarik tentang Desa Wisata Sedari</p>
-    </div>
-
-    <div class="row">
-      <?php foreach ($artikel_eksternal as $index => $a): ?>
-        <div class="col-lg-4" data-aos="fade-up" data-aos-delay="<?= 200 + ($index * 200) ?>">
-          <a href="<?= $a['link']; ?>" target="_blank" class="post-box text-decoration-none text-dark">
-            <div class="post-img">
-              <img src="<?= base_url('assets/fe/img/blog/' . $a['gambar']); ?>" class="img-fluid" alt="<?= $a['judul']; ?>">
-              <div class="post-category">Artikel Eksternal</div>
-            </div>
-            <div class="post-content">
-              <h3 class="post-title"><?= $a['judul']; ?></h3>
-              <p class="text-muted small"><?= date('d F Y', strtotime($a['tanggal'])); ?></p>
-              <span class="readmore">
-                Baca Selengkapnya <i class="bi bi-arrow-right"></i>
-              </span>
-            </div>
-          </a>
-        </div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
+   
 
 
     <!-- ======= Contact Section ======= -->
@@ -1196,10 +1169,7 @@
 
       </div>
 
-      <div class="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6673.361062505385!2d107.30087748038845!3d-5.9941514686509905!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6bd2a4c32e6001%3A0x10c24e5b31f2622a!2sWisata%20Alam%20Mangrove%20Sedari!5e0!3m2!1sid!2sid!4v1751363585423!5m2!1sid!2sid" frameborder="0" allowfullscreen></iframe>
-      </div><!-- End Google Maps -->
-
+      
       <div class="container">
 
         <div class="row gy-5 gx-lg-5">

@@ -374,6 +374,8 @@
   background: #218838;
 }
 
+
+
 </style>
 
 
@@ -402,38 +404,53 @@
               <label class="form-label">Tema Kunjungan *</label>
               <input type="text" class="form-control" name="tema_kunjungan" id="tema_kunjungan" placeholder="Contoh: Wisata Keluarga, Study Tour, Outbound, dll" required>
             </div>
-<h5 class="form-label">Tiket Masuk Jenis Wisata</h5>
-<div class="facilities-grid">
+<h5 class="form-label" style="font-size:13px;">Tiket Masuk Jenis Wisata</h5>
+<div class="facilities-grid" style="font-size:13px;">
   <?php foreach ($jenis_wisata as $j): ?>
-    <div class="facility-item position-relative">
-      <!-- Input custom dengan tombol -->
-      <div style="position: absolute; top: 10px; right: 10px;" class="input-counter">
+    <div class="facility-item position-relative" style="font-size:13px; min-height:60px;">
+      
+      <!-- Counter di kanan tengah -->
+      <div style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);" class="input-counter">
         <button type="button" class="btn-minus" onclick="changeValue('jenis_wisata_<?= $j['id_jenis']; ?>', -1)">–</button>
-        <input type="text" id="jenis_wisata_<?= $j['id_jenis']; ?>" name="jenis_wisata[<?= $j['id_jenis']; ?>]" value="0" class="counter-input">
+        <input type="text" id="jenis_wisata_<?= $j['id_jenis']; ?>" 
+               name="jenis_wisata[<?= $j['id_jenis']; ?>]" 
+               value="0" 
+               class="counter-input" 
+               style="font-size:12px; width:30px; text-align:center;" readonly>
         <button type="button" class="btn-plus" onclick="changeValue('jenis_wisata_<?= $j['id_jenis']; ?>', 1)">+</button>
       </div>
 
-      <div class="facility-name mb-1"><?= $j['nama_wisata']; ?></div>
-      <div class="facility-price">Rp <?= number_format($j['harga_tiket'], 0, ',', '.'); ?>/org</div>
+      <!-- Info wisata -->
+      <div class="facility-name mb-1" style="font-size:13px;"><?= $j['nama_wisata']; ?></div>
+      <div class="facility-price" style="font-size:12px;">Rp <?= number_format($j['harga_tiket'], 0, ',', '.'); ?>/org</div>
     </div>
   <?php endforeach; ?>
 </div>
 
-    <h5 class="form-label mt-4">Paket Wisata</h5>
-<div class="facilities-grid">
+
+
+    <h5 class="form-label mt-4" style="font-size:13px;">Paket Wisata</h5>
+<div class="facilities-grid" style="font-size:13px;">
   <?php foreach ($paket as $p): ?>
-    <div class="facility-item position-relative">
-      <div style="position: absolute; top: 10px; right: 10px;" class="input-counter">
+    <div class="facility-item position-relative" style="font-size:13px; min-height:60px;">
+      
+      <!-- Counter di kanan tengah -->
+      <div style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%);" class="input-counter">
         <button type="button" class="btn-minus" onclick="changeValue('paket_<?= $p['id']; ?>', -1)">–</button>
-        <input type="text" id="paket_<?= $p['id']; ?>" name="paket[<?= $p['id']; ?>]" value="0" class="counter-input" readonly>
+        <input type="text" id="paket_<?= $p['id']; ?>" name="paket[<?= $p['id']; ?>]" 
+               value="0" class="counter-input" readonly 
+               style="width:30px; text-align:center; font-size:12px;">
         <button type="button" class="btn-plus" onclick="changeValue('paket_<?= $p['id']; ?>', 1)">+</button>
       </div>
 
-      <div class="facility-name mb-1"><?= $p['nama_paket']; ?></div>
-      <div class="facility-price">Rp <?= number_format($p['harga'], 0, ',', '.'); ?>/org</div>
+      <!-- Info paket -->
+      <div class="facility-name mb-1" style="font-size:13px;"><?= $p['nama_paket']; ?></div>
+      <div class="facility-price" style="font-size:12px;">Rp <?= number_format($p['harga'], 0, ',', '.'); ?>/org</div>
     </div>
   <?php endforeach; ?>
 </div>
+
+
 
             <!-- Additional Facilities -->
              <h5 class="form-label mt-4">Fasilitas Tambahan (opsional)</h5>
