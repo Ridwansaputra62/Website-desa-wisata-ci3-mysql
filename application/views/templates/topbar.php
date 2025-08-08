@@ -60,7 +60,7 @@
                     <!-- ✅ INI YANG DIUBAH: gambar profil pojok kanan atas -->
                     <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic"
                        href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img src="<?= base_url('assets/images/users/ad.png'); ?>" alt="user"
+                        <img src="<?= base_url('assets/images/users/user.png'); ?>" alt="user"
                              class="rounded-circle" width="31" height="31" style="object-fit: cover;">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right user-dd animated">
